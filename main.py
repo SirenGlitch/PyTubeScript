@@ -1,5 +1,6 @@
 from pytubefix import Search, YouTube
 from pytubefix.cli import on_progress
+from pytubefix.exceptions import *
 
 results = Search(input('Enter the search term: '))
 
@@ -9,10 +10,26 @@ options = [] # Create an empty list to hold the selected options
 for video in results.videos:
     vidNumber += 1
     print(f'Option: {vidNumber}')
-    print(f'Title: {video.title}')
-    print(f'Author: {video.author}')
-    print(f'Duration: {video.length} seconds')
-    print('---')
+    for attempt in range(5):
+        try:
+            print(f'Title: {video.title}')
+            print(f'Author: {video.author}')
+            print(f'Duration: {video.length} seconds')
+            print('---')
+
+        except BotDetection:
+            print('Bot detected, please try again later.')
+
+        except LoginRequired:
+            print("Login required to view video.")
+
+        except VideoUnavailable:
+            print(f'Video {video.video_id} is unavailable, skipping.')
+
+        else:
+            break
+    else:
+        print("Yeah something broken af")
 
 while True:
     selected_option = input("Enter the number of the video you want to download or 'q' to quit: ") # Ask the user to enter a video option
