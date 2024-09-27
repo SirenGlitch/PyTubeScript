@@ -7,6 +7,10 @@ results = Search(input('Enter the search term: '))
 vidNumber = 0
 options = [] # Create an empty list to hold the selected options
 
+# SSL certificate verify bypass
+import ssl
+ssl._create_default_https_context = ssl._create_stdlib_context
+
 for video in results.videos:
     vidNumber += 1
     print(f'Option: {vidNumber}')
